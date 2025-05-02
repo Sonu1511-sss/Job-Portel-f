@@ -26,7 +26,8 @@ const SignUp = () => {
     e.preventDefault();
     try {
       // Axios POST request to sign up
-      const response = await axios.post(`${window.local.origin}/api/auth/signup`, formData);
+      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
+
       toast.success(response.data.message);
       navigate('/sign-in'); // Redirect to sign-in after successful registration
     } catch (error) {

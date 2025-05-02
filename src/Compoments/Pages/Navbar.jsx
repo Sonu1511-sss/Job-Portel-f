@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaBars,
   FaTimes,
@@ -21,6 +21,24 @@ import { Menu } from "@headlessui/react";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
+  const [userName, setUserName] = useState(""); // Store the user's name
+
+  useEffect(() => {
+    // Here you can retrieve the user data from localStorage or an API
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      setIsLoggedIn(true);
+      setUserName(user.firstName); // Assuming user has a firstName
+    }
+  }, []);
+
+  const handleLogout = () => {
+    // Clear user data (you can also clear other states or localStorage if needed)
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    setUserName("");
+  };
 
   const menuItems = [
     { label: "Jobs", icon: <FaBriefcase />, href: "/jobs" },
@@ -138,18 +156,28 @@ const Navbar = () => {
           </Menu>
 
           {/* Icons */}
-         <a href="/messages"><FaEnvelope className="text-xl cursor-pointer" title="Messages" /></a> 
-         <a href="/notificatio"><FaBell className="text-xl cursor-pointer" title="Notifications" /></a> 
+          <a href="/messages"><FaEnvelope className="text-xl cursor-pointer" title="Messages" /></a> 
+          <a href="/notification"><FaBell className="text-xl cursor-pointer" title="Notifications" /></a>
 
-          {/* Profile Image */}
-          <div className="w-8 h-8 rounded-full bg-gray-600 cursor-pointer">
-            <a href="/sign-in">
-              <img
-                className="w-8 h-8 rounded-full"
-                src="https://media.licdn.com/dms/image/v2/D4D03AQEI2Q6g0iYJ6A/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1731205970568?e=1736985600&v=beta&t=iajxgOUHtsKGnwpNe1jQyzcHOv0gJMAEM1gBWS39Rxg"
-                alt="Profile"
-              />
-            </a>
+          {/* Profile Image or User Name */}
+          <div className="flex items-center space-x-4">
+            {isLoggedIn ? (
+              <>
+                <span className="text-gray-300">{userName}</span>
+                <button
+                  onClick={handleLogout}
+                  className="text-gray-300 hover:text-white text-sm"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-gray-600 cursor-pointer">
+                <a href="/sign-in">
+                  <img src="\public\assids\shubha.jpeg" alt="" className="w-8 h-8 rounded-full"/>
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>
